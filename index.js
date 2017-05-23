@@ -2,70 +2,63 @@ function TinyMask(pattern, options) {
 	var defaultOptions = {
 		translation: {
 			'9': function (val) {
-				return String(val).replace(/[^0-9]+/g, '');
+				return val.replace(/[^0-9]+/g, '');
 			},
 			'A': function (val) {
-				return String(val).replace(/[^a-zA-Z]+/g, '');
+				return val.replace(/[^a-zA-Z]+/g, '');
 			},
 			'S': function (val) {
-				return String(val).replace(/[^a-zA-Z0-9]+/g, '');
+				return val.replace(/[^a-zA-Z0-9]+/g, '');
 			},
 			'*': function (val) {
-				return String(val);
+				return val;
 			}
 		},
-		invalidValues: [null, undefined, ''],
+		invalidValues: [null, undefined, '']
+	};
+
+	var opt = options || {};
+	this._options = {
+		translation: Object.assign(defaultOptions.translation, opt.translation),
+		invalidValues: Object.assign(defaultOptions.invalidValues, opt.invalidValues),
 		pattern: pattern
 	};
 
-	this._options = this._merge(defaultOptions, options || {});
+	this._handlers = [];
+
+	for (var i = 0; i < pattern.length; i++) {
+		var element = pattern[i];
+
+		var result = this._options.translation[element] || element;
+		this._handlers.push(result);
+	}
 };
 
-TinyMask.prototype._merge = function (obj1, obj2) {
-	var obj3 = {};
-	for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
-	for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
-	return obj3;
-}
-
 TinyMask.prototype.mask = function (value) {
-	var translation = this._options.translation;
-	var invalidValues = this._options.invalidValues;
-	var pattern = this._options.pattern;
-
 	var result = '';
 
-	var maskSize = pattern.length;
-	var valueSize = value.length;
-
+	var val = String(value);
+	var maskSize = this._handlers.length;
 	var maskResolved = 0;
 	var valueResolved = 0;
 
-	while (maskResolved < maskSize && valueResolved < valueSize) {
-		var valueChar = value[valueResolved];
-		var maskChar = pattern[maskResolved];
+	while (maskResolved < maskSize) {
+		var hand = this._handlers[maskResolved++];
 
-		if (valueChar === maskChar) {
-			result += valueChar;
-			maskResolved++;
-			valueResolved++;
+		if (typeof hand === "string") {
+			result += hand
 			continue;
 		}
 
-		var handler = translation[maskChar];
+		var toParse = val[valueResolved++];
+		var parsed = hand(toParse === undefined ? '' : toParse);
 
-		if (!handler) {
-			result += maskChar;
-			maskResolved++;
-			continue;
+		if (this._options.invalidValues.indexOf(parsed) < 0) {
+			result += parsed;
 		}
-
-		var masked = handler(valueChar);
-		if (invalidValues.indexOf(masked) < 0) {
-			result += masked
-			maskResolved++
+		else {
+			break;
 		}
-		valueResolved++
 	}
 
 	return result;
