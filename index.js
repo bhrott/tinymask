@@ -55,6 +55,10 @@ TinyMask.prototype.mask = function (value) {
 		var hand = this._handlers[maskResolved];
 		var char = val[valueResolved];
 
+		if (char === undefined) {
+			break;
+		}
+
 		if (char === hand) {
 			result += char;
 			maskResolved++;
@@ -68,7 +72,7 @@ TinyMask.prototype.mask = function (value) {
 			continue;
 		}
 
-		var parsed = hand(this._isString(char) ? char : '');
+		var parsed = hand(char);
 
 		if (this._options.invalidValues.indexOf(parsed) < 0) {
 			result += parsed;

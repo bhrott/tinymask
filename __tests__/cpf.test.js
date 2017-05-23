@@ -27,10 +27,10 @@ test('1234567890123 results on 123.456.789-01', function() {
 	expect(result).toBe(expected);
 });
 
-test('123.456.789 results on 123.456.789-', function() {
+test('123.456.789 results on 123.456.789', function() {
 	var instance = new TinyMask('999.999.999-99');
 
-	var expected = '123.456.789-';
+	var expected = '123.456.789';
 	var result = instance.mask('123.456.789');
 
 	expect(result).toBe(expected);

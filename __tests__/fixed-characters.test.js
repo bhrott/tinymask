@@ -1,9 +1,9 @@
 var TinyMask = require('../index');
 
-test('12345 and mask 999-99-1111 results on 123-45-1111', function() {
+test('12345 and mask 999-99-1111 results on 123-45', function() {
 	var instance = new TinyMask('999-99-1111');
 
-	var expected = '123-45-1111';
+	var expected = '123-45';
 	var result = instance.mask('12345');
 
 	expect(result).toBe(expected);
@@ -45,10 +45,10 @@ test('12-3 and mask 99-99-XX results on 12-3', function() {
 	expect(result).toBe(expected);
 });
 
-test('12-34-X and mask 99-99-XX results on 12-34-XX', function() {
+test('12-34-X and mask 99-99-XX results on 12-34-X', function() {
 	var instance = new TinyMask('99-99-XX');
 
-	var expected = '12-34-XX';
+	var expected = '12-34-X';
 	var result = instance.mask('12-34-X');
 
 	expect(result).toBe(expected);
