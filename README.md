@@ -84,5 +84,8 @@ var maskInstance = TinyMask('9999-9999', {
 
 ## Release Notes
 
+## 1.0.1
+* Fixing fixed masks.
+
 ### 1.0.0
 * Releasing the first version of the mask.

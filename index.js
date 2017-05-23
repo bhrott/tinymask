@@ -34,31 +34,51 @@ function TinyMask(pattern, options) {
 	}
 };
 
+TinyMask.prototype._isString = function(value) {
+	return typeof value === "string";
+}
+
 TinyMask.prototype.mask = function (value) {
 	var result = '';
 
 	var val = String(value);
+
+	if (val.length === 0) return;
+
 	var maskSize = this._handlers.length;
 	var maskResolved = 0;
+
+	var valueSize = val.length;
 	var valueResolved = 0;
 
 	while (maskResolved < maskSize) {
-		var hand = this._handlers[maskResolved++];
+		var hand = this._handlers[maskResolved];
+		var char = val[valueResolved];
 
-		if (typeof hand === "string") {
-			result += hand
+		if (char === hand) {
+			result += char;
+			maskResolved++;
+			valueResolved++
 			continue;
 		}
 
-		var toParse = val[valueResolved++];
-		var parsed = hand(toParse === undefined ? '' : toParse);
+		if (this._isString(hand)) {
+			result += hand;
+			maskResolved++;
+			continue;
+		}
+
+		var parsed = hand(this._isString(char) ? char : '');
 
 		if (this._options.invalidValues.indexOf(parsed) < 0) {
 			result += parsed;
+			valueResolved++;
 		}
 		else {
 			break;
 		}
+
+		maskResolved++;
 	}
 
 	return result;

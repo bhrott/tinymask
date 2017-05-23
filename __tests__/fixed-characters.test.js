@@ -17,3 +17,39 @@ test('1234 and mask 999-99-1111 results on 123-4', function() {
 
 	expect(result).toBe(expected);
 });
+
+test('12-3 and mask 99-XX-99 results on 12-XX-3', function() {
+	var instance = new TinyMask('99-XX-99');
+
+	var expected = '12-XX-3';
+	var result = instance.mask('12-3');
+
+	expect(result).toBe(expected);
+});
+
+test('12-XX-3 and mask 99-XX-99 results on 12-XX-3', function() {
+	var instance = new TinyMask('99-XX-99');
+
+	var expected = '12-XX-3';
+	var result = instance.mask('12-XX-3');
+
+	expect(result).toBe(expected);
+});
+
+test('12-3 and mask 99-99-XX results on 12-3', function() {
+	var instance = new TinyMask('99-99-XX');
+
+	var expected = '12-3';
+	var result = instance.mask('12-3');
+
+	expect(result).toBe(expected);
+});
+
+test('12-34-X and mask 99-99-XX results on 12-34-XX', function() {
+	var instance = new TinyMask('99-99-XX');
+
+	var expected = '12-34-XX';
+	var result = instance.mask('12-34-X');
+
+	expect(result).toBe(expected);
+});
