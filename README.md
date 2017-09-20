@@ -5,12 +5,16 @@ A js mask simple like killing zombies =).
 Install it from npm using `npm install --save tinymask`
 
 ```js
-var TinyMask = require('tinymask')
-var maskInstance = TinyMask('9999-9999');
+import * as TinyMask from "tinymask"
 
-var result = maskInstance.mask('12345678');
-
-console.log(result); //1234-5678
+onChangeText(text: string){
+    var maskInstance = new TinyMask('9999-9999');
+    var result = maskInstance.mask('12345678');
+    console.log(result); //1234-5678
+.
+. Do stuff
+.
+  }
 ```
 
 By default, we use this translation:
